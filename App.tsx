@@ -13,9 +13,9 @@ import image1 from "./assets/book1.jpg";
 import image2 from "./assets/book2.jpg";
 import image3 from "./assets/book3.jpg";
 import image4 from "./assets/book4.jpg";
-import BookCard from "./components/BookCard";
-import { CategoryChips } from "./components/CategoryChips";
 
+import { CategoryChips } from "./components/CategoryChips";
+import BookCard2 from "./components/BookCard2";
 export default function App() {
   const books = [
     {
@@ -76,6 +76,7 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={styles.contentContainer}>
         <ScrollView contentContainerStyle={styles.scrollList}>
           <View style={styles.wrapperCard}>
@@ -83,18 +84,20 @@ export default function App() {
             <CategoryChips categories={bookCategories} />
           </View>
 
-          {/* <View style={styles.sectionContainer}>
+          <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Sách nổi bật</Text>
-            {books.map((book) => (
-              <BookCard
-                key={book.id}
-                image={book.image}
-                title={book.title}
-                author={book.author}
-                price={book.price}
-              />
-            ))}
-          </View> */}
+
+            <View style={styles.bookGrid}>
+              {books.map((book) => (
+                <BookCard2
+                  key={book.id}
+                  image={book.image}
+                  title={book.title}
+                  price={book.price}
+                />
+              ))}
+            </View>
+          </View>
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -162,5 +165,12 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     marginTop: 8,
+  },
+  bookGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    alignContent: "flex-start",
   },
 });
