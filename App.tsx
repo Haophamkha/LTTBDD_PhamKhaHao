@@ -1,11 +1,20 @@
-import { StyleSheet, Text, View, TouchableOpacity,ScrollView } from "react-native";
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 import image1 from "./assets/book1.jpg";
 import image2 from "./assets/book2.jpg";
 import image3 from "./assets/book3.jpg";
 import image4 from "./assets/book4.jpg";
-import BookCard from "./BookCard";
+import BookCard from "./components/BookCard";
+import { CategoryChips } from "./components/CategoryChips";
 
 export default function App() {
   const books = [
@@ -38,8 +47,20 @@ export default function App() {
       image: image4,
     },
   ];
+
+  const bookCategories = [
+    "Văn học",
+    "Kinh tế",
+    "Thiếu nhi",
+    "Truyện tranh",
+    "Ngoại ngữ",
+    "Lịch sử",
+    "Khoa học công nghệ",
+    "Kỹ năng sống",
+  ];
+
   return (
-    <View>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.leftContainer}>
           <Text style={styles.logo}>BookStore</Text>
@@ -57,22 +78,34 @@ export default function App() {
       </View>
       <View style={styles.contentContainer}>
         <ScrollView contentContainerStyle={styles.scrollList}>
-          {books.map((book) => (
-            <BookCard
-              key={book.id}
-              image={book.image}
-              title={book.title}
-              author={book.author}
-              price={book.price}
-            />
-          ))}
+          <View style={styles.wrapperCard}>
+            <Text style={styles.sectionTitle}>Danh mục</Text>
+            <CategoryChips categories={bookCategories} />
+          </View>
+
+          {/* <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>Sách nổi bật</Text>
+            {books.map((book) => (
+              <BookCard
+                key={book.id}
+                image={book.image}
+                title={book.title}
+                author={book.author}
+                price={book.price}
+              />
+            ))}
+          </View> */}
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F3F4F6",
+  },
   header: {
     height: 56,
     flexDirection: "row",
@@ -81,25 +114,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FFFFFF",
     width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
   },
-
   leftContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-
   logo: {
     fontSize: 20,
     fontWeight: "bold",
     color: "blue",
   },
-
   rightContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
-
   iconButton: {
     width: 42,
     height: 42,
@@ -110,5 +141,26 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
+  },
+  scrollList: {
+    padding: 16,
+    gap: 16,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 12,
+  },
+  wrapperCard: {
+    borderWidth: 1,
+    borderColor: "#6886a9",
+    borderStyle: "dashed",
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: "#FFF",
+  },
+  sectionContainer: {
+    marginTop: 8,
   },
 });
