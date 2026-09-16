@@ -17,6 +17,7 @@ import image4 from "./assets/book4.jpg";
 import { CategoryChips } from "./components/CategoryChips";
 import BookCard2 from "./components/BookCard2";
 import FloatingCartButton from "./components/FloatingCartButton";
+
 export default function App() {
   const books = [
     {
@@ -62,6 +63,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header cố định */}
       <View style={styles.header}>
         <View style={styles.leftContainer}>
           <Text style={styles.logo}>BookStore</Text>
@@ -73,18 +75,28 @@ export default function App() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.iconButton}>
-            <Feather name="shopping-cart" size={22} color="#2563EB" />
+            <Feather
+              name="shopping-cart"
+              size={22}
+              color="#2563EB"
+            />
           </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.contentContainer}>
-        <ScrollView contentContainerStyle={styles.scrollList}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollList}
+        >
+          {/* Category Chips */}
           <View style={styles.wrapperCard}>
             <Text style={styles.sectionTitle}>Danh mục</Text>
+
             <CategoryChips categories={bookCategories} />
           </View>
 
+          {/* Book Grid */}
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Sách nổi bật</Text>
 
@@ -101,6 +113,7 @@ export default function App() {
           </View>
         </ScrollView>
       </View>
+
       <FloatingCartButton quantity={4} />
     </SafeAreaView>
   );
@@ -149,6 +162,7 @@ const styles = StyleSheet.create({
   },
   scrollList: {
     padding: 16,
+    paddingBottom: 100,
     gap: 16,
   },
   sectionTitle: {
