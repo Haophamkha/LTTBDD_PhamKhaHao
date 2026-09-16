@@ -16,6 +16,7 @@ import image4 from "./assets/book4.jpg";
 
 import { CategoryChips } from "./components/CategoryChips";
 import BookCard2 from "./components/BookCard2";
+import FloatingCartButton from "./components/FloatingCartButton";
 export default function App() {
   const books = [
     {
@@ -100,6 +101,7 @@ export default function App() {
           </View>
         </ScrollView>
       </View>
+      <FloatingCartButton quantity={4} />
     </SafeAreaView>
   );
 }
