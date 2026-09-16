@@ -1,10 +1,42 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import Badge from "./Badge";
 
-export default function BookCard2({ image, title, price }) {
+type Book = {
+  id: string;
+  title: string;
+  author: string;
+  price: string;
+  image: any;
+};
+
+type BookCard2Props = {
+  image: any;
+  title: string;
+  price: string;
+  book: Book;
+  onPress: () => void;
+};
+
+export default function BookCard2({
+  image,
+  title,
+  price,
+  book,
+  onPress,
+}: BookCard2Props) {
   return (
-    <View style={styles.cardItem}>
+    <TouchableOpacity
+      style={styles.cardItem}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
       <View style={styles.imageContainer}>
         <Image
           source={image}
@@ -19,9 +51,10 @@ export default function BookCard2({ image, title, price }) {
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
+
         <Text style={styles.price}>{price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -33,25 +66,30 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 16,
   },
+
   imageContainer: {
     position: "relative",
   },
+
   coverImage: {
     width: "100%",
     height: 200,
   },
+
   infoContainer: {
     padding: 10,
   },
+
   title: {
     fontSize: 14,
     fontWeight: "600",
     color: "#333333",
     marginBottom: 6,
   },
+
   price: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "red",
+    color: "#EF4444",
   },
 });
