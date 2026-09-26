@@ -10,7 +10,9 @@ export default function FloatingCartButton({
 }: FloatingCartButtonProps) {
   return (
     <TouchableOpacity style={styles.cartButton}>
-      <Text style={{ fontSize: 12, fontWeight: "bold" }}>Giỏ hàng</Text>
+      <Text style={{ fontSize: 12, fontWeight: "bold", color: "#FFFFFF" }}>
+        Giỏ hàng
+      </Text>
 
       <View style={styles.badge}>
         <Text style={styles.badgeText}>{quantity}</Text>
@@ -22,7 +24,7 @@ export default function FloatingCartButton({
 const styles = StyleSheet.create({
   cartButton: {
     position: "absolute",
-    bottom: 24,
+    bottom: 75,
     right: 20,
     width: 56,
     height: 56,
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
+    zIndex: 10,
   },
 
   badge: {
