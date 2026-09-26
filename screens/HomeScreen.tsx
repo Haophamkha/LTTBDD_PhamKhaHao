@@ -92,7 +92,10 @@ export default function HomeScreen() {
             <Feather name="search" size={22} color="#2563EB" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => navigation.navigate("Cart")}
+          >
             <Feather name="shopping-cart" size={22} color="#2563EB" />
           </TouchableOpacity>
         </View>

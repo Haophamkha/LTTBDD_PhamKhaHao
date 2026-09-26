@@ -9,8 +9,6 @@ export type Book = {
 
 export type RootStackParamList = {
   Home: undefined;
-
-  BookDetail: {
-    book: Book;
-  };
+  Cart: undefined;
+  BookDetail: { book: any };
 };
