@@ -1,9 +1,11 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "../screens/HomeScreen";
 import CartScreen from "../screens/CartScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+
 import BottomTabBar from "../components/BottomTabBar";
 
 import type { BottomTabParamList } from "./types";
@@ -35,10 +37,7 @@ export default function TabNavigator() {
 
       <Tab.Screen name="Cart" component={CartScreen} />
 
-      <Tab.Screen
-        name="Profile"
-        children={() => <PlaceholderScreen title="Màn hình Tài khoản" />}
-      />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -48,12 +47,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F3F4F6",
   },
-
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
   },
 });

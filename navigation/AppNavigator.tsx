@@ -5,7 +5,8 @@ import TabNavigator from "./TabNavigator";
 import BookDetailScreen from "../screens/BookDetailScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
 import type { RootStackParamList } from "./types";
-
+import ProfileScreen from "../screens/ProfileScreen";
+  
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
