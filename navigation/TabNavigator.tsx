@@ -1,0 +1,59 @@
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { View, Text, StyleSheet } from "react-native";
+
+import HomeScreen from "../screens/HomeScreen";
+import CartScreen from "../screens/CartScreen";
+import BottomTabBar from "../components/BottomTabBar";
+
+import type { BottomTabParamList } from "./types";
+
+const Tab = createBottomTabNavigator<BottomTabParamList>();
+
+function PlaceholderScreen({ title }: { title: string }) {
+  return (
+    <View style={styles.center}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+}
+
+export default function TabNavigator() {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <BottomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+
+      <Tab.Screen
+        name="Category"
+        children={() => <PlaceholderScreen title="Màn hình Danh mục" />}
+      />
+
+      <Tab.Screen name="Cart" component={CartScreen} />
+
+      <Tab.Screen
+        name="Profile"
+        children={() => <PlaceholderScreen title="Màn hình Tài khoản" />}
+      />
+    </Tab.Navigator>
+  );
+}
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F3F4F6",
+  },
+
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+});

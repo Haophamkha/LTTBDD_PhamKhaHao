@@ -1,4 +1,3 @@
-// screens/HomeScreen.tsx
 import React from "react";
 import {
   StyleSheet,
@@ -10,63 +9,32 @@ import {
 } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
-import image1 from "../assets/book1.jpg";
-import image2 from "../assets/book2.jpg";
-import image3 from "../assets/book3.jpg";
-import image4 from "../assets/book4.jpg";
 
 import { CategoryChips } from "../components/CategoryChips";
 import BookCard2 from "../components/BookCard2";
 import FloatingCartButton from "../components/FloatingCartButton";
-import BottomTabBar from "../components/BottomTabBar";
 
 import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParamList } from "../navigation/types";
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import type { CompositeNavigationProp } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+
+import type {
+  RootStackParamList,
+  BottomTabParamList,
+} from "../navigation/types";
+
+type HomeNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<BottomTabParamList, "Home">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+import { books } from "../data/books";
 
 export default function HomeScreen() {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<HomeNavigationProp>();
 
-  const books = [
-    {
-      id: "1",
-      title: "Lập trình React Native căn bản",
-      author: "Nguyễn Văn A",
-      price: "120.000 đ",
-      image: image1,
-      description:
-        "Lập trình React Native căn bản là cuốn sách dành cho những người mới bắt đầu tìm hiểu về phát triển ứng dụng di động bằng React Native.\n\nCuốn sách cung cấp những kiến thức nền tảng về React Native, cách xây dựng giao diện, sử dụng component, xử lý sự kiện và quản lý dữ liệu trong ứng dụng.\n\nCác nội dung được trình bày theo từng bước từ cơ bản đến nâng cao, giúp người đọc dễ dàng thực hành và áp dụng vào các dự án thực tế.",
-    },
-    {
-      id: "2",
-      title: "JavaScript nâng cao từ A đến Z",
-      author: "Trần Văn B",
-      price: "150.000 đ",
-      image: image2,
-      description:
-        "JavaScript nâng cao từ A đến Z cung cấp những kiến thức chuyên sâu về ngôn ngữ JavaScript dành cho người đã có nền tảng lập trình.\n\nNội dung tập trung vào các khái niệm quan trọng như function, object, array, callback, promise, async/await và cách tổ chức mã nguồn hiệu quả.\n\nCuốn sách phù hợp cho những người muốn nâng cao kỹ năng JavaScript và chuẩn bị tốt hơn cho việc xây dựng các ứng dụng web và mobile hiện đại.",
-    },
-    {
-      id: "3",
-      title: "Tư duy nhanh và chậm",
-      author: "Daniel Kahneman",
-      price: "180.000 đ",
-      image: image3,
-      description:
-        "Tư duy nhanh và chậm giới thiệu những nghiên cứu quan trọng về cách con người suy nghĩ và đưa ra quyết định.\n\nCuốn sách trình bày hai hệ thống tư duy: một hệ thống hoạt động nhanh chóng, trực giác và một hệ thống hoạt động chậm hơn, có tính phân tích.\n\nThông qua nhiều ví dụ thực tế, người đọc có thể hiểu rõ hơn về cách tư duy, những sai lệch trong nhận thức và cách chúng ảnh hưởng đến quyết định hàng ngày.",
-    },
-    {
-      id: "4",
-      title: "Clean Code - Mã sạch cho lập trình viên",
-      author: "Robert C. Martin",
-      price: "220.000 đ",
-      image: image4,
-      description:
-        "Clean Code - Mã sạch cho lập trình viên là tài liệu tham khảo dành cho những người muốn nâng cao chất lượng mã nguồn.\n\nCuốn sách trình bày các nguyên tắc và phương pháp giúp viết code dễ đọc, dễ hiểu, dễ bảo trì và dễ mở rộng.\n\nThông qua các ví dụ cụ thể, người đọc có thể nhận biết những đoạn code chưa tốt và từng bước cải thiện cấu trúc chương trình để tạo ra phần mềm có chất lượng cao hơn.",
-    },
-  ];
 
   const bookCategories = [
     "Văn học",
@@ -81,7 +49,6 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header cố định */}
       <View style={styles.header}>
         <View style={styles.leftContainer}>
           <Text style={styles.logo}>BookStore</Text>
@@ -108,6 +75,7 @@ export default function HomeScreen() {
         >
           <View style={styles.wrapperCard}>
             <Text style={styles.sectionTitle}>Danh mục</Text>
+
             <CategoryChips categories={bookCategories} />
           </View>
 
@@ -118,10 +86,15 @@ export default function HomeScreen() {
               {books.map((book) => (
                 <BookCard2
                   key={book.id}
+                  book={book}
                   image={book.image}
                   title={book.title}
                   price={book.price}
-                  onPress={() => navigation.navigate("BookDetail", { book })}
+                  onPress={() =>
+                    navigation.navigate("BookDetail", {
+                      bookId: book.id,
+                    })
+                  }
                 />
               ))}
             </View>
@@ -130,14 +103,9 @@ export default function HomeScreen() {
       </View>
 
       <FloatingCartButton quantity={4} />
-      <BottomTabBar
-        activeTab="Trang chủ"
-        onTabPress={(tab) => console.log(tab)}
-      />
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

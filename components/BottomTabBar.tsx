@@ -1,41 +1,71 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-interface BottomTabBarProps {
-  activeTab?: string;
-  onTabPress?: (tabName: string) => void;
-}
-
-export default function BottomTabBar({
-  activeTab = "Trang chủ",
-  onTabPress,
-}: BottomTabBarProps) {
+export default function BottomTabBar({ state, navigation }: BottomTabBarProps) {
   const tabs = [
-    { name: "Trang chủ", icon: "home" },
-    { name: "Danh mục", icon: "grid" },
-    { name: "Giỏ hàng", icon: "shopping-cart" },
-    { name: "Tài khoản", icon: "user" },
+    {
+      name: "Home",
+      label: "Trang chủ",
+      icon: "home",
+    },
+    {
+      name: "Category",
+      label: "Danh mục",
+      icon: "grid",
+    },
+    {
+      name: "Cart",
+      label: "Giỏ hàng",
+      icon: "shopping-cart",
+    },
+    {
+      name: "Profile",
+      label: "Tài khoản",
+      icon: "user",
+    },
   ];
 
   return (
-    <View style={styles.tabBarContainer}>
-      {tabs.map((tab) => {
-        const isActive = activeTab === tab.name;
+    <View style={styles.tabContainer}>
+      {tabs.map((tab, index) => {
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: "tabPress",
+            target: tab.name,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(tab.name as never);
+          }
+        };
+
         return (
           <TouchableOpacity
             key={tab.name}
             style={styles.tabItem}
+            onPress={onPress}
             activeOpacity={0.7}
-            onPress={() => onTabPress && onTabPress(tab.name)}
           >
             <Feather
               name={tab.icon as any}
               size={22}
-              color={isActive ? "#2563EB" : "#9CA3AF"}
+              color={isFocused ? "#2563EB" : "#6B7280"}
             />
-            <Text style={[styles.tabText, isActive && styles.activeTabText]}>
-              {tab.name}
+
+            <Text
+              style={[
+                styles.tabLabel,
+                {
+                  color: isFocused ? "#2563EB" : "#6B7280",
+                },
+              ]}
+            >
+              {tab.label}
             </Text>
           </TouchableOpacity>
         );
@@ -45,35 +75,31 @@ export default function BottomTabBar({
 }
 
 const styles = StyleSheet.create({
-  tabBarContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 60,
+  tabContainer: {
     flexDirection: "row",
+    height: 60,
     backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
     borderTopColor: "#E5E7EB",
-    elevation: 10,
+    elevation: 8,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.05,
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+
   tabItem: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
   },
-  tabText: {
-    fontSize: 12,
-    color: "#9CA3AF",
+
+  tabLabel: {
+    fontSize: 11,
     marginTop: 4,
-  },
-  activeTabText: {
-    color: "#2563EB",
-    fontWeight: "bold",
+    fontWeight: "500",
   },
 });

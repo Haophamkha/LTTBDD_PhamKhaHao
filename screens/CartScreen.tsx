@@ -13,7 +13,6 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 
 import CartItemRow from "../components/CartItemRow";
-import BottomTabBar from "../components/BottomTabBar";
 
 import image1 from "../assets/book1.jpg";
 import image2 from "../assets/book2.jpg";
@@ -44,7 +43,7 @@ export default function CartScreen() {
 
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.rawPrice * item.quantity,
-    0
+    0,
   );
 
   const formattedTotal = totalAmount.toLocaleString("vi-VN") + " đ";
@@ -52,10 +51,15 @@ export default function CartScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
           <Feather name="arrow-left" size={22} color="#333" />
         </TouchableOpacity>
+
         <Text style={styles.headerTitle}>Giỏ hàng của bạn</Text>
+
         <View style={{ width: 22 }} />
       </View>
 
@@ -79,8 +83,10 @@ export default function CartScreen() {
       <View style={styles.checkoutContainer}>
         <View style={styles.totalInfo}>
           <Text style={styles.totalLabel}>Tổng tiền:</Text>
+
           <Text style={styles.totalPrice}>{formattedTotal}</Text>
         </View>
+
         <TouchableOpacity
           style={styles.checkoutButton}
           onPress={() => alert("Thực hiện thanh toán thành công!")}
@@ -88,15 +94,6 @@ export default function CartScreen() {
           <Text style={styles.checkoutButtonText}>Thanh toán</Text>
         </TouchableOpacity>
       </View>
-
-      <BottomTabBar
-        activeTab="Giỏ hàng"
-        onTabPress={(tab) => {
-          if (tab === "Trang chủ") {
-            navigation.navigate("Home");
-          }
-        }}
-      />
     </SafeAreaView>
   );
 }
@@ -106,6 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F3F4F6",
   },
+
   header: {
     height: 56,
     flexDirection: "row",
@@ -116,20 +114,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",
   },
+
   backButton: {
     padding: 4,
   },
+
   headerTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#333333",
   },
+
   contentContainer: {
     flex: 1,
   },
+
   scrollList: {
     padding: 16,
   },
+
   checkoutContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -140,24 +143,29 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#E5E7EB",
   },
+
   totalInfo: {
     justifyContent: "center",
   },
+
   totalLabel: {
     fontSize: 12,
     color: "#6B7280",
   },
+
   totalPrice: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#2563EB",
   },
+
   checkoutButton: {
     backgroundColor: "#2563EB",
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
+
   checkoutButtonText: {
     color: "#FFFFFF",
     fontSize: 14,

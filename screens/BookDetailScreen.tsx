@@ -12,16 +12,29 @@ import Feather from "@expo/vector-icons/Feather";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 
-type Props = NativeStackScreenProps<
-  RootStackParamList,
-  "BookDetail"
->;
+import { books } from "../data/books";
 
-export default function BookDetailScreen({
-  route,
-  navigation,
-}: Props) {
-  const { book } = route.params;
+type Props = NativeStackScreenProps<RootStackParamList, "BookDetail">;
+
+export default function BookDetailScreen({ route, navigation }: Props) {
+  const { bookId } = route.params;
+
+  const book = books.find((item) => item.id === bookId);
+
+  if (!book) {
+    return (
+      <View style={styles.notFoundContainer}>
+        <Text style={styles.notFoundText}>Không tìm thấy sách</Text>
+
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backText}>Quay lại</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -33,11 +46,7 @@ export default function BookDetailScreen({
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Feather
-            name="arrow-left"
-            size={24}
-            color="#333"
-          />
+          <Feather name="arrow-left" size={24} color="#333" />
         </TouchableOpacity>
 
         <View style={styles.imageContainer}>
@@ -49,45 +58,27 @@ export default function BookDetailScreen({
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.title}>
-            {book.title}
-          </Text>
+          <Text style={styles.title}>{book.title}</Text>
 
-          <Text style={styles.author}>
-            Tác giả: {book.author}
-          </Text>
+          <Text style={styles.author}>Tác giả: {book.author}</Text>
 
-          <Text style={styles.price}>
-            {book.price}
-          </Text>
+          <Text style={styles.price}>{book.price}</Text>
 
-          <Text style={styles.descriptionTitle}>
-            Mô tả
-          </Text>
+          <Text style={styles.descriptionTitle}>Mô tả</Text>
 
-          <Text style={styles.description}>
-            {book.description}
-          </Text>
+          <Text style={styles.description}>{book.description}</Text>
         </View>
       </ScrollView>
 
       <View style={styles.bottomBar}>
         <View>
-          <Text style={styles.bottomPrice}>
-            {book.price}
-          </Text>
+          <Text style={styles.bottomPrice}>{book.price}</Text>
         </View>
 
         <TouchableOpacity style={styles.addButton}>
-          <Feather
-            name="shopping-cart"
-            size={20}
-            color="#FFFFFF"
-          />
+          <Feather name="shopping-cart" size={20} color="#FFFFFF" />
 
-          <Text style={styles.addButtonText}>
-            Thêm vào giỏ
-          </Text>
+          <Text style={styles.addButtonText}>Thêm vào giỏ</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -115,6 +106,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
+  coverImage: {
+    width: "100%",
+    height: "100%",
+  },
+
   imageContainer: {
     width: "100%",
     height: 320,
@@ -124,11 +120,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     overflow: "hidden",
-  },
-
-  coverImage: {
-    width: "100%",
-    height: "100%",
   },
 
   infoContainer: {
@@ -201,6 +192,25 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "#FFFFFF",
     fontSize: 15,
+    fontWeight: "bold",
+  },
+
+  notFoundContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F3F4F6",
+  },
+
+  notFoundText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 20,
+  },
+
+  backText: {
+    color: "#2563EB",
     fontWeight: "bold",
   },
 });

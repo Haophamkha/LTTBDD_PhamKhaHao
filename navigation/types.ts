@@ -8,7 +8,15 @@ export type Book = {
 };
 
 export type RootStackParamList = {
+  MainTabs: undefined;
+  BookDetail: {
+    bookId: string;
+  };
+};
+
+export type BottomTabParamList = {
   Home: undefined;
+  Category: undefined;
   Cart: undefined;
-  BookDetail: { book: any };
+  Profile: undefined;
 };
