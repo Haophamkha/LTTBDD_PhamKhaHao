@@ -8,12 +8,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-
-
-import { CategoryChips } from "../components/CategoryChips";
-import BookCard2 from "../components/BookCard2";
-import FloatingCartButton from "../components/FloatingCartButton";
-
 import { useNavigation } from "@react-navigation/native";
 
 import type { CompositeNavigationProp } from "@react-navigation/native";
@@ -25,16 +19,22 @@ import type {
   BottomTabParamList,
 } from "../navigation/types";
 
+import { CategoryChips } from "../components/CategoryChips";
+import BookCard2 from "../components/BookCard2";
+import FloatingCartButton from "../components/FloatingCartButton";
+
+import { books } from "../data/books";
+import { useCart } from "../store/useCart";
+
 type HomeNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<BottomTabParamList, "Home">,
   NativeStackNavigationProp<RootStackParamList>
 >;
 
-import { books } from "../data/books";
-
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigationProp>();
 
+  const { totalQuantity } = useCart();
 
   const bookCategories = [
     "Văn học",
@@ -102,15 +102,17 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
 
-      <FloatingCartButton quantity={4} />
+      <FloatingCartButton quantity={totalQuantity} />
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F3F4F6",
   },
+
   header: {
     height: 56,
     flexDirection: "row",
@@ -122,20 +124,24 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",
   },
+
   leftContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
+
   logo: {
     fontSize: 20,
     fontWeight: "bold",
     color: "blue",
   },
+
   rightContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
+
   iconButton: {
     width: 42,
     height: 42,
@@ -144,20 +150,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "white",
   },
+
   contentContainer: {
     flex: 1,
   },
+
   scrollList: {
     padding: 16,
     paddingBottom: 130,
     gap: 16,
   },
+
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 12,
   },
+
   wrapperCard: {
     borderWidth: 1,
     borderColor: "#6886a9",
@@ -166,9 +176,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#FFF",
   },
+
   sectionContainer: {
     marginTop: 8,
   },
+
   bookGrid: {
     flexDirection: "row",
     flexWrap: "wrap",

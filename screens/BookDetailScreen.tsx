@@ -13,11 +13,14 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 
 import { books } from "../data/books";
+import { useCart } from "../store/useCart";
 
 type Props = NativeStackScreenProps<RootStackParamList, "BookDetail">;
 
 export default function BookDetailScreen({ route, navigation }: Props) {
   const { bookId } = route.params;
+
+  const { add } = useCart();
 
   const book = books.find((item) => item.id === bookId);
 
@@ -35,6 +38,10 @@ export default function BookDetailScreen({ route, navigation }: Props) {
       </View>
     );
   }
+
+  const handleAddToCart = () => {
+    add(book.id);
+  };
 
   return (
     <View style={styles.container}>
@@ -75,7 +82,11 @@ export default function BookDetailScreen({ route, navigation }: Props) {
           <Text style={styles.bottomPrice}>{book.price}</Text>
         </View>
 
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={handleAddToCart}
+          activeOpacity={0.8}
+        >
           <Feather name="shopping-cart" size={20} color="#FFFFFF" />
 
           <Text style={styles.addButtonText}>Thêm vào giỏ</Text>

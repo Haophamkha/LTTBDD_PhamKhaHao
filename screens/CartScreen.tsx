@@ -13,38 +13,14 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 
 import CartItemRow from "../components/CartItemRow";
-
-import image1 from "../assets/book1.jpg";
-import image2 from "../assets/book2.jpg";
+import { useCart } from "../store/useCart";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function CartScreen() {
   const navigation = useNavigation<NavigationProp>();
 
-  const cartItems = [
-    {
-      id: "1",
-      title: "Lập trình React Native căn bản",
-      rawPrice: 120000,
-      price: "120.000 đ",
-      quantity: 1,
-      image: image1,
-    },
-    {
-      id: "2",
-      title: "JavaScript nâng cao từ A đến Z",
-      rawPrice: 150000,
-      price: "150.000 đ",
-      quantity: 2,
-      image: image2,
-    },
-  ];
-
-  const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.rawPrice * item.quantity,
-    0,
-  );
+  const { cartItems, totalAmount, update, remove } = useCart();
 
   const formattedTotal = totalAmount.toLocaleString("vi-VN") + " đ";
 
@@ -70,11 +46,15 @@ export default function CartScreen() {
         >
           {cartItems.map((item) => (
             <CartItemRow
-              key={item.id}
+              key={item.bookId}
+              bookId={item.bookId}
               image={item.image}
               title={item.title}
               quantity={item.quantity}
               price={item.price}
+              onIncrease={() => update(item.bookId, item.quantity + 1)}
+              onDecrease={() => update(item.bookId, item.quantity - 1)}
+              onRemove={() => remove(item.bookId)}
             />
           ))}
         </ScrollView>

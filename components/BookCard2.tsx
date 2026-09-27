@@ -1,20 +1,7 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Badge from "./Badge";
-
-type Book = {
-  id: string;
-  title: string;
-  author: string;
-  price: string;
-  image: any;
-};
+import type { Book } from "../navigation/types";
 
 type BookCard2Props = {
   image: any;
@@ -38,11 +25,7 @@ export default function BookCard2({
       activeOpacity={0.8}
     >
       <View style={styles.imageContainer}>
-        <Image
-          source={image}
-          style={styles.coverImage}
-          resizeMode="cover"
-        />
+        <Image source={image} style={styles.coverImage} resizeMode="cover" />
 
         <Badge text="-20%" />
       </View>
