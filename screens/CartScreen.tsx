@@ -89,7 +89,11 @@ export default function CartScreen() {
 
         <TouchableOpacity
           style={styles.checkoutButton}
-          onPress={() => alert("Thực hiện thanh toán thành công!")}
+          onPress={() =>
+            navigation.navigate("Checkout", {
+              totalAmount,
+            })
+          }
         >
           <Text style={styles.checkoutButtonText}>Thanh toán</Text>
         </TouchableOpacity>

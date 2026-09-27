@@ -9,9 +9,8 @@ export type Book = {
 
 export type RootStackParamList = {
   MainTabs: undefined;
-  BookDetail: {
-    bookId: string;
-  };
+  BookDetail: { bookId: string };
+  Checkout: { totalAmount: number };
 };
 
 export type BottomTabParamList = {
