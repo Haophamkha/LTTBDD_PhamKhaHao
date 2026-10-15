@@ -37,12 +37,33 @@ export default function HomeScreen() {
     );
   }, []);
 
-  // Tạm thời đổi tim trong state, Câu 5 sẽ thêm PUT
-  const handleToggleFavorite = useCallback((id: string, next: boolean) => {
+  const setFavorite = (id: string, value: boolean) => {
     setTours((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, isFavorite: next } : t)),
+      prev.map((t) => (t.id === id ? { ...t, isFavorite: value } : t)),
     );
-  }, []);
+  };
+
+  const handleToggleFavorite = useCallback(
+    async (id: string, next: boolean) => {
+      // 5b: cập nhật lạc quan, đổi state ngay
+      setFavorite(id, next);
+
+      try {
+        // 5a: PUT lên API
+        const res = await fetch(`${API_URL}/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isFavorite: next }),
+        });
+        if (!res.ok) throw new Error("PUT failed");
+      } catch (e) {
+        // 5c: lỗi thì hoàn tác và báo lỗi
+        setFavorite(id, !next);
+        Alert.alert("Lỗi", "Không thể cập nhật yêu thích. Vui lòng thử lại.");
+      }
+    },
+    [],
+  );
 
   const favoriteHeader = (
     <View style={s.favBox}>
