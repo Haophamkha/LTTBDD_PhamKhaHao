@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   SectionList,
   StyleSheet,
   Text,
@@ -19,15 +20,43 @@ export default function HomeScreen() {
   const [search, setSearch] = useState("");
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then(setTours)
-      .finally(() => setLoading(false));
+  const fetchTours = useCallback(async () => {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error("GET failed");
+    const data = await res.json();
+    setTours(data);
   }, []);
 
-  const sections = useMemo(() => groupByCity(tours), [tours]);
+  useEffect(() => {
+    fetchTours()
+      .catch(() => Alert.alert("Lỗi", "Không thể tải danh sách tour."))
+      .finally(() => setLoading(false));
+  }, [fetchTours]);
+
+  // 6c: kéo xuống để làm mới, giữ nguyên từ khoá đang tìm
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await fetchTours();
+    } catch (e) {
+      Alert.alert("Lỗi", "Không thể làm mới danh sách.");
+    } finally {
+      setRefreshing(false);
+    }
+  }, [fetchTours]);
+
+  // 6a: lọc theo tên, không phân biệt hoa thường, bỏ khoảng trắng đầu/cuối
+  const sections = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+    const filtered = tours.filter((t) =>
+      t.name.toLowerCase().includes(keyword),
+    );
+    return groupByCity(filtered); // nhóm rỗng tự bị loại
+  }, [tours, search]);
+
+  // Mục yêu thích không bị ảnh hưởng bởi ô tìm kiếm
   const favorites = useMemo(() => tours.filter((t) => t.isFavorite), [tours]);
 
   const handlePress = useCallback((tour: Tour) => {
@@ -45,11 +74,8 @@ export default function HomeScreen() {
 
   const handleToggleFavorite = useCallback(
     async (id: string, next: boolean) => {
-      // 5b: cập nhật lạc quan, đổi state ngay
       setFavorite(id, next);
-
       try {
-        // 5a: PUT lên API
         const res = await fetch(`${API_URL}/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -57,7 +83,6 @@ export default function HomeScreen() {
         });
         if (!res.ok) throw new Error("PUT failed");
       } catch (e) {
-        // 5c: lỗi thì hoàn tác và báo lỗi
         setFavorite(id, !next);
         Alert.alert("Lỗi", "Không thể cập nhật yêu thích. Vui lòng thử lại.");
       }
@@ -112,6 +137,12 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           stickySectionHeadersEnabled
           ListHeaderComponent={favoriteHeader}
+          ListEmptyComponent={
+            <Text style={s.empty}>Không tìm thấy tour phù hợp</Text>
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           renderSectionHeader={({ section }) => (
             <Text style={s.sectionHeader}>
               {section.title} · {section.data.length} tour
@@ -156,4 +187,5 @@ const s = StyleSheet.create({
     marginBottom: 8,
   },
   favEmpty: { marginHorizontal: 12, color: "#666" },
+  empty: { textAlign: "center", marginTop: 24, color: "#666", fontSize: 16 },
 });
