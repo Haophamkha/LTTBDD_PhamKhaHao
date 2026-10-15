@@ -1,15 +1,37 @@
-import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ActivityIndicator,
+  SectionList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import type { Tour } from "../components/TourItem";
+import { groupByCity } from "../utils/tour";
+
+const API_URL = "https://693231efe5a9e342d26e2cf8.mockapi.io/tours";
 
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then(setTours)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const sections = useMemo(() => groupByCity(tours), [tours]);
 
   return (
     <SafeAreaView style={s.container}>
       <View style={s.header}>
         <Text style={s.title}>Tour Việt</Text>
-        <Text style={s.student}>22674001 - Phạm Khả Hào</Text>
+        <Text style={s.student}>MSSV - Phạm Khả Hào</Text>
         <TextInput
           style={s.input}
           placeholder="Tìm tour theo tên..."
@@ -17,6 +39,27 @@ export default function HomeScreen() {
           onChangeText={setSearch}
         />
       </View>
+
+      {loading ? (
+        <ActivityIndicator size="large" style={{ flex: 1 }} />
+      ) : (
+        <SectionList
+          sections={sections}
+          keyExtractor={(item) => item.id}
+          stickySectionHeadersEnabled
+          renderSectionHeader={({ section }) => (
+            <Text style={s.sectionHeader}>
+              {section.title} · {section.data.length} tour
+            </Text>
+          )}
+          renderItem={({ item }) => (
+            <View style={s.row}>
+              <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+              <Text>{item.departure}</Text>
+            </View>
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -33,4 +76,11 @@ const s = StyleSheet.create({
     paddingVertical: 8,
     marginTop: 8,
   },
+  sectionHeader: {
+    backgroundColor: "#e6f4fe",
+    padding: 8,
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  row: { padding: 12, borderBottomWidth: 1, borderColor: "#ddd" },
 });
