@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   SectionList,
   StyleSheet,
   Text,
@@ -8,8 +9,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import type { Tour } from "../components/TourItem";
-import { groupByCity } from "../utils/tour";
+import TourItem, { Tour } from "../components/TourItem";
+import { formatDate, formatPrice, groupByCity } from "../utils/tour";
 
 const API_URL = "https://693231efe5a9e342d26e2cf8.mockapi.io/tours";
 
@@ -26,6 +27,20 @@ export default function HomeScreen() {
   }, []);
 
   const sections = useMemo(() => groupByCity(tours), [tours]);
+
+  const handlePress = useCallback((tour: Tour) => {
+    Alert.alert(
+      tour.name,
+      `Khởi hành: ${formatDate(tour.departure)}\nSố ngày: ${tour.days} ngày\nGiá: ${formatPrice(tour.price)}`,
+    );
+  }, []);
+
+  // Tạm thời đổi tim trong state, Câu 5 sẽ thêm PUT
+  const handleToggleFavorite = useCallback((id: string, next: boolean) => {
+    setTours((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, isFavorite: next } : t)),
+    );
+  }, []);
 
   return (
     <SafeAreaView style={s.container}>
@@ -53,10 +68,11 @@ export default function HomeScreen() {
             </Text>
           )}
           renderItem={({ item }) => (
-            <View style={s.row}>
-              <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-              <Text>{item.departure}</Text>
-            </View>
+            <TourItem
+              tour={item}
+              onPress={handlePress}
+              onToggleFavorite={handleToggleFavorite}
+            />
           )}
         />
       )}
@@ -82,5 +98,4 @@ const s = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  row: { padding: 12, borderBottomWidth: 1, borderColor: "#ddd" },
 });
