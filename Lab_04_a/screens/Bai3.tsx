@@ -21,7 +21,7 @@ export default function Bai3() {
   return (
     <FlatList
       data={users}
-      keyExtractor={(item) => String(item.id)}
+      keyExtractor={(item, index) => `${item.id}-${index}`}
       renderItem={({ item }) => (
         <View
           style={{ padding: 12, borderBottomWidth: 1, borderColor: "#ddd" }}
